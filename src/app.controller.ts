@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Headers, HttpCode, Param, Query, Req, Request } from '@nestjs/common';
+import { Body, Controller, Get, Headers, HttpCode, Param, Query, Req, Request, UseGuards } from '@nestjs/common';
 import { AppService } from './app.service';
 import { ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
 interface person {
   id: number;
   hoTen: string;
@@ -20,6 +21,7 @@ export class AppController {
     let { id, hoTen, email } = body
     return idQuery
   }
+
   @Get("/aaa")
   getHello(): string {
     return this.appService.getHello();
@@ -28,4 +30,6 @@ export class AppController {
   getDemo(): string {
     return "demo11111"
   }
+
 }
+

@@ -11,7 +11,6 @@ async function bootstrap() {
     const config = new swagger_1.DocumentBuilder().setTitle("Swagger title").build();
     const document = swagger_1.SwaggerModule.createDocument(app, config);
     swagger_1.SwaggerModule.setup("swagger", app, document);
-    app.enableCors();
     await app.listen(3002);
 }
 bootstrap();

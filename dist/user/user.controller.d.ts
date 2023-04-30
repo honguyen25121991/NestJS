@@ -1,4 +1,5 @@
 import { UserService } from './user.service';
+import { userLogin } from './Dto/user.dto';
 import { ConfigService } from '@nestjs/config';
 import { PrismaClient } from '@prisma/client';
 export declare class UserController {
@@ -9,7 +10,7 @@ export declare class UserController {
     getUser(req: any): Promise<any>;
     getUserbyId(): string;
     createUser(body: any): Promise<any>;
-    loginUser(body: any): Promise<any>;
+    loginUser(body: userLogin): Promise<any>;
     putUser(): string;
     removeUser(): string;
 }

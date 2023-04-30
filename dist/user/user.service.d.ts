@@ -9,5 +9,5 @@ export declare class UserService {
         tuoi: any;
         anh_dai_dien: any;
     }): Promise<any>;
-    loginUser(email: any, mat_khau: any): Promise<any>;
+    loginUser(email: string, mat_khau: string): Promise<any>;
 }

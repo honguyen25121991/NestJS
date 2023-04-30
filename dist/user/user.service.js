@@ -17,7 +17,8 @@ let UserService = class UserService {
         return await this.prisma.nguoi_dung.findMany();
     }
     async createUser(user) {
-        return await this.prisma.nguoi_dung.create({ data: user });
+        await this.prisma.nguoi_dung.create({ data: user });
+        return `Tạo người dùng thành công`;
     }
     async loginUser(email, mat_khau) {
         const user = await this.prisma.nguoi_dung.findFirst({ where: { email, mat_khau } });

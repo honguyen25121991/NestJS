@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const user_service_1 = require("./user.service");
 const config_1 = require("@nestjs/config");
 const client_1 = require("@prisma/client");
+const passport_1 = require("@nestjs/passport");
 const platform_express_1 = require("@nestjs/platform-express");
 const multer_1 = require("multer");
 const swagger_1 = require("@nestjs/swagger");
@@ -42,7 +43,6 @@ let UserController = class UserController {
         try {
             const { email, mat_khau, ho_ten, tuoi, anh_dai_dien } = body;
             await this.userService.createUser({ email, mat_khau, ho_ten, tuoi, anh_dai_dien });
-            return `Tạo người dùng thành công`;
         }
         catch (error) {
             throw new common_1.HttpException("Lỗi BE", 500);
@@ -75,7 +75,8 @@ __decorate([
             filename: (req, file, callback) => callback(null, Date.now() + "_" + file.originalname)
         })
     })),
-    (0, common_1.Get)(),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
+    (0, common_1.Get)("/get-all-users"),
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),

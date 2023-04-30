@@ -1,6 +1,6 @@
-import { Body, Controller, Delete, ForbiddenException, Get, HttpException, HttpStatus, InternalServerErrorException, Param, Post, Put, Query, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, ForbiddenException, Get, HttpCode, HttpException, HttpStatus, InternalServerErrorException, Param, Post, Put, Query, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { UserService } from './user.service';
-import { UserDto, } from './Dto/user.dto';
+import { UserDto, userLogin, } from './Dto/user.dto';
 import { ConfigService } from '@nestjs/config';
 import { PrismaClient, nguoi_dung } from '@prisma/client';
 import { AuthGuard } from '@nestjs/passport';
@@ -39,8 +39,9 @@ export class UserController {
     //         throw new HttpException("Lỗi BE", 500)
     //     }
     // }
-    // @UseGuards(AuthGuard('jwt'))
-    @Get()
+    @UseGuards(AuthGuard('jwt'))
+    @Get("/get-all-users")
+
     getUser(
         @Req() req
     ): Promise<any> {
@@ -56,6 +57,7 @@ export class UserController {
     getUserbyId() {
         return "ssss"
     }
+
     @Post("/create-user/")
     async createUser(
         @Body() body: any,
@@ -63,7 +65,6 @@ export class UserController {
         try {
             const { email, mat_khau, ho_ten, tuoi, anh_dai_dien } = body
             await this.userService.createUser({ email, mat_khau, ho_ten, tuoi, anh_dai_dien })
-            return `Tạo người dùng thành công`
         } catch (error) {
             throw new HttpException("Lỗi BE", 500)
         }
@@ -71,7 +72,7 @@ export class UserController {
     }
     @Post("/login-user/")
     async loginUser(
-        @Body() body: any,
+        @Body() body: userLogin,
     ): Promise<any> {
         try {
             const { email, mat_khau } = body

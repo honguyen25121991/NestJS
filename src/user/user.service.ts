@@ -11,13 +11,14 @@ export class UserService {
     async createUser(user: {
         email: any, mat_khau: any, ho_ten: any, tuoi: any, anh_dai_dien: any
     }): Promise<any> {
-        return await this.prisma.nguoi_dung.create({ data: user })
+        await this.prisma.nguoi_dung.create({ data: user })
+        return `Tạo người dùng thành công`
     }
     async loginUser(
-        email: any,
-        mat_khau: any
+        email: string,
+        mat_khau: string
     ): Promise<any> {
-        const user: any = await this.prisma.nguoi_dung.findFirst({ where: { email, mat_khau } });
+        const user: userLogin = await this.prisma.nguoi_dung.findFirst({ where: { email, mat_khau } });
         if (user !== null) {
             return `Login thanh cong`
         } else {
