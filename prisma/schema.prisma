@@ -8,7 +8,7 @@ datasource db {
 }
 
 model binh_luan {
-  binh_luan_id   Int         @id
+  binh_luan_id   Int         @id @default(autoincrement())
   nguoi_dung_id  Int?
   hinh_id        Int?
   ngay_binh_luan DateTime?   @db.Date

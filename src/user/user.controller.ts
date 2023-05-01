@@ -28,20 +28,9 @@ export class UserController {
             filename: (req, file, callback) => callback(null, Date.now() + "_" + file.originalname)
         })
     }))
-    // @Post("/upload-avatar/:user_id")
-    // uploadAva(
-    //     @Param("user_id") userId: string,
-    //     @UploadedFile() file: Express.Multer.File) {
-    //     // return file
-    //     try {
-    //         return this.userService.saveAva(userId, file.filename)
-    //     } catch (error) {
-    //         throw new HttpException("Lỗi BE", 500)
-    //     }
-    // }
+
     @UseGuards(AuthGuard('jwt'))
     @Get("/get-all-users")
-
     getUser(
         @Req() req
     ): Promise<any> {
@@ -53,23 +42,23 @@ export class UserController {
                 HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
-    @Get(":id")
-    getUserbyId() {
-        return "ssss"
-    }
 
+    @UseGuards(AuthGuard('jwt'))
     @Post("/create-user/")
     async createUser(
-        @Body() body: any,
+        @Body() body: {
+            email: string, mat_khau: string, ho_ten: string, tuoi: number, anh_dai_dien: string
+        },
     ): Promise<any> {
         try {
             const { email, mat_khau, ho_ten, tuoi, anh_dai_dien } = body
-            await this.userService.createUser({ email, mat_khau, ho_ten, tuoi, anh_dai_dien })
+            return await this.userService.createUser({ email, mat_khau, ho_ten, tuoi, anh_dai_dien })
         } catch (error) {
             throw new HttpException("Lỗi BE", 500)
         }
-
     }
+
+    @UseGuards(AuthGuard('jwt'))
     @Post("/login-user/")
     async loginUser(
         @Body() body: userLogin,
@@ -81,6 +70,45 @@ export class UserController {
             throw new HttpException("Lỗi BE", 500)
         }
     }
+
+    @UseGuards(AuthGuard('jwt'))
+    @Get("/:id")
+    async getInfoUser(
+        @Param("id") id: string,
+    ): Promise<any> {
+        try {
+            return await this.userService.getInfoUser(id)
+        } catch (error) {
+            throw new HttpException("Lỗi BE", 500)
+        }
+    }
+
+    @UseGuards(AuthGuard('jwt'))
+    @Put("/update/:id")
+    async updateInfoUser(
+        @Body() body: any,
+        @Param("id") id: string
+    ) {
+        try {
+            const { email, mat_khau, ho_ten, tuoi, anh_dai_dien } = body
+            return await this.userService.updateInfoUser(
+                { email, mat_khau, ho_ten, tuoi, anh_dai_dien }, id
+            )
+        } catch (error) {
+            throw new HttpException("Lỗi BE", 500)
+        }
+    }
+    // @Post("/upload-avatar/:user_id")
+    // uploadAva(
+    //     @Param("user_id") userId: string,
+    //     @UploadedFile() file: Express.Multer.File) {
+    //     // return file
+    //     try {
+    //         return this.userService.saveAva(userId, file.filename)
+    //     } catch (error) {
+    //         throw new HttpException("Lỗi BE", 500)
+    //     }
+    // }
     @Put()
     putUser() {
         return "put User"

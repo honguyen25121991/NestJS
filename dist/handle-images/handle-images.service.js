@@ -16,6 +16,49 @@ let HandleImagesService = class HandleImagesService {
     async getImages() {
         return await this.prisma.hinh_anh.findMany();
     }
+    async getNameImage(name) {
+        return await this.prisma.hinh_anh.findFirst({ where: { ten_hinh: name } });
+    }
+    async getDetaiImage(id) {
+        return await this.prisma.hinh_anh.findFirst({ where: { hinh_id: +id } });
+    }
+    async checkSaveImage(id) {
+        const check = await this.prisma.luu_anh.findFirst({ where: { hinh_id: +id } });
+        if (check !== null) {
+            return `Đã lưu`;
+        }
+        else {
+            return ` Chưa lưu`;
+        }
+    }
+    async getListImageSaved(id) {
+        return await this.prisma.hinh_anh.findMany({ where: { nguoi_dung_id: +id } });
+    }
+    async getListImageCreated(id) {
+        return await this.prisma.luu_anh.findMany({ where: { nguoi_dung_id: +id } });
+    }
+    async deleteImage(id) {
+        const check = await this.prisma.hinh_anh.delete({ where: { hinh_id: +id } });
+        console.log(check);
+        if (check !== null) {
+            return `Delete success`;
+        }
+        else {
+            return `Xoá thất bại`;
+        }
+    }
+    async updateImage(id, imageName) {
+        let data = await this.prisma.hinh_anh.findFirst({
+            where: { nguoi_dung_id: +id }
+        });
+        data.ten_hinh = imageName;
+        await this.prisma.hinh_anh.update({
+            data, where: {
+                hinh_id: +id
+            }
+        });
+        return "Upload Success";
+    }
 };
 HandleImagesService = __decorate([
     (0, common_1.Injectable)()

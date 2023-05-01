@@ -14,6 +14,7 @@ const user_module_1 = require("./user/user.module");
 const config_1 = require("@nestjs/config");
 const auth_module_1 = require("./auth/auth.module");
 const handle_images_module_1 = require("./handle-images/handle-images.module");
+const comment_module_1 = require("./comment/comment.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -21,6 +22,7 @@ AppModule = __decorate([
         imports: [user_module_1.UserModule, config_1.ConfigModule.forRoot({ isGlobal: true }),
             auth_module_1.AuthModule,
             handle_images_module_1.HandleImagesModule,
+            comment_module_1.CommentModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

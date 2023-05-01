@@ -36,13 +36,10 @@ let UserController = class UserController {
             throw new common_1.HttpException("Lỗi BE", common_1.HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    getUserbyId() {
-        return "ssss";
-    }
     async createUser(body) {
         try {
             const { email, mat_khau, ho_ten, tuoi, anh_dai_dien } = body;
-            await this.userService.createUser({ email, mat_khau, ho_ten, tuoi, anh_dai_dien });
+            return await this.userService.createUser({ email, mat_khau, ho_ten, tuoi, anh_dai_dien });
         }
         catch (error) {
             throw new common_1.HttpException("Lỗi BE", 500);
@@ -52,6 +49,23 @@ let UserController = class UserController {
         try {
             const { email, mat_khau } = body;
             return await this.userService.loginUser(email, mat_khau);
+        }
+        catch (error) {
+            throw new common_1.HttpException("Lỗi BE", 500);
+        }
+    }
+    async getInfoUser(id) {
+        try {
+            return await this.userService.getInfoUser(id);
+        }
+        catch (error) {
+            throw new common_1.HttpException("Lỗi BE", 500);
+        }
+    }
+    async updateInfoUser(body, id) {
+        try {
+            const { email, mat_khau, ho_ten, tuoi, anh_dai_dien } = body;
+            return await this.userService.updateInfoUser({ email, mat_khau, ho_ten, tuoi, anh_dai_dien }, id);
         }
         catch (error) {
             throw new common_1.HttpException("Lỗi BE", 500);
@@ -83,12 +97,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "getUser", null);
 __decorate([
-    (0, common_1.Get)(":id"),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], UserController.prototype, "getUserbyId", null);
-__decorate([
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
     (0, common_1.Post)("/create-user/"),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -96,12 +105,30 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "createUser", null);
 __decorate([
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
     (0, common_1.Post)("/login-user/"),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "loginUser", null);
+__decorate([
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
+    (0, common_1.Get)("/:id"),
+    __param(0, (0, common_1.Param)("id")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "getInfoUser", null);
+__decorate([
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
+    (0, common_1.Put)("/update/:id"),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Param)("id")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "updateInfoUser", null);
 __decorate([
     (0, common_1.Put)(),
     __metadata("design:type", Function),
