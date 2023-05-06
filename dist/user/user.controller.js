@@ -46,13 +46,8 @@ let UserController = class UserController {
         }
     }
     async loginUser(body) {
-        try {
-            const { email, mat_khau } = body;
-            return await this.userService.loginUser(email, mat_khau);
-        }
-        catch (error) {
-            throw new common_1.HttpException("Lỗi BE", 500);
-        }
+        const { email, mat_khau } = body;
+        return await this.userService.loginUser(email, mat_khau);
     }
     async getInfoUser(id) {
         try {
@@ -105,7 +100,6 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "createUser", null);
 __decorate([
-    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
     (0, common_1.Post)("/login-user/"),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),

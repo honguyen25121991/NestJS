@@ -58,17 +58,16 @@ export class UserController {
         }
     }
 
-    @UseGuards(AuthGuard('jwt'))
     @Post("/login-user/")
     async loginUser(
         @Body() body: userLogin,
     ): Promise<any> {
-        try {
-            const { email, mat_khau } = body
-            return await this.userService.loginUser(email, mat_khau)
-        } catch (error) {
-            throw new HttpException("Lỗi BE", 500)
-        }
+        // try {
+        const { email, mat_khau } = body
+        return await this.userService.loginUser(email, mat_khau)
+        // } catch (error) {
+        //     throw new HttpException("Lỗi BE", 500)
+        // }
     }
 
     @UseGuards(AuthGuard('jwt'))

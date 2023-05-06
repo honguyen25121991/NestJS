@@ -1,8 +1,15 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { PrismaClient, nguoi_dung } from '@prisma/client'
 import { userLogin } from './Dto/user.dto';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class UserService {
+    constructor(
+        private jwtService: JwtService,
+        private config: ConfigService,
+    ) { }
+
     prisma = new PrismaClient()
 
     async getUser(): Promise<nguoi_dung[]> {
@@ -18,13 +25,18 @@ export class UserService {
             throw new HttpException("Lỗi BE", 500)
         }
     }
+
     async loginUser(
         email: string,
         mat_khau: string
     ): Promise<any> {
         const user: userLogin = await this.prisma.nguoi_dung.findFirst({ where: { email, mat_khau } });
         if (user !== null) {
-            return `Login thanh cong`
+            let token = this.jwtService.sign({ data: 'nodejs 29' },
+                { secret: this.config.get("SECRET_KEY"), expiresIn: "60m" }
+            )
+            return { "token": token, "Message": "Login thanh cong" }
+
         } else {
             return `Sai tk hoac mat khau`
         }

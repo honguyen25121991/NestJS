@@ -6,7 +6,8 @@ import { nguoi_dung } from '@prisma/client';
 import { userLogin } from 'src/user/Dto/user.dto';
 @Injectable()
 export class AuthService {
-  constructor(private jwtService: JwtService,
+  constructor(
+    private jwtService: JwtService,
     private config: ConfigService
   ) { }
   login(userLogin: userLogin) {
