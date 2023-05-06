@@ -46,8 +46,13 @@ let UserController = class UserController {
         }
     }
     async loginUser(body) {
-        const { email, mat_khau } = body;
-        return await this.userService.loginUser(email, mat_khau);
+        try {
+            const { email, mat_khau } = body;
+            return await this.userService.loginUser(email, mat_khau);
+        }
+        catch (error) {
+            throw new common_1.HttpException("Lỗi BE", 500);
+        }
     }
     async getInfoUser(id) {
         try {
@@ -63,7 +68,7 @@ let UserController = class UserController {
             return await this.userService.updateInfoUser({ email, mat_khau, ho_ten, tuoi, anh_dai_dien }, id);
         }
         catch (error) {
-            throw new common_1.HttpException("Lỗi BE", 500);
+            return `Người dùng không tồn tại`;
         }
     }
     putUser() {
@@ -92,7 +97,6 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "getUser", null);
 __decorate([
-    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
     (0, common_1.Post)("/create-user/"),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),

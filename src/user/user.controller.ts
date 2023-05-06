@@ -43,7 +43,7 @@ export class UserController {
         }
     }
 
-    @UseGuards(AuthGuard('jwt'))
+
     @Post("/create-user/")
     async createUser(
         @Body() body: {
@@ -62,12 +62,12 @@ export class UserController {
     async loginUser(
         @Body() body: userLogin,
     ): Promise<any> {
-        // try {
-        const { email, mat_khau } = body
-        return await this.userService.loginUser(email, mat_khau)
-        // } catch (error) {
-        //     throw new HttpException("Lỗi BE", 500)
-        // }
+        try {
+            const { email, mat_khau } = body
+            return await this.userService.loginUser(email, mat_khau)
+        } catch (error) {
+            throw new HttpException("Lỗi BE", 500)
+        }
     }
 
     @UseGuards(AuthGuard('jwt'))
@@ -94,7 +94,7 @@ export class UserController {
                 { email, mat_khau, ho_ten, tuoi, anh_dai_dien }, id
             )
         } catch (error) {
-            throw new HttpException("Lỗi BE", 500)
+            return `Người dùng không tồn tại`
         }
     }
     // @Post("/upload-avatar/:user_id")

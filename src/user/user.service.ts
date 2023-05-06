@@ -18,12 +18,8 @@ export class UserService {
     async createUser(user: {
         email: string, mat_khau: string, ho_ten: string, tuoi: number, anh_dai_dien: string
     }): Promise<any> {
-        try {
-            await this.prisma.nguoi_dung.create({ data: user })
-            return `Tạo người dùng thành công`
-        } catch (error) {
-            throw new HttpException("Lỗi BE", 500)
-        }
+        await this.prisma.nguoi_dung.create({ data: user })
+        return `Tạo người dùng thành công`
     }
 
     async loginUser(
@@ -48,9 +44,15 @@ export class UserService {
     async updateInfoUser(data: {
         email: any, mat_khau: any, ho_ten: any, tuoi: any, anh_dai_dien: any
     }, id: string): Promise<any> {
-        const check = await this.prisma.nguoi_dung.update({ data, where: { nguoi_dung_id: +id } })
+        const check = await this.prisma.nguoi_dung.update({
+            data, where: {
+                nguoi_dung_id: +id
+            }
+        })
         if (check !== null) {
-            return `Update Success`
+            return {
+                check, "Message": 'Update success'
+            }
         } else {
             return `Update Fail`
         }

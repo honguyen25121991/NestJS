@@ -24,13 +24,8 @@ let UserService = class UserService {
         return await this.prisma.nguoi_dung.findMany();
     }
     async createUser(user) {
-        try {
-            await this.prisma.nguoi_dung.create({ data: user });
-            return `Tạo người dùng thành công`;
-        }
-        catch (error) {
-            throw new common_1.HttpException("Lỗi BE", 500);
-        }
+        await this.prisma.nguoi_dung.create({ data: user });
+        return `Tạo người dùng thành công`;
     }
     async loginUser(email, mat_khau) {
         const user = await this.prisma.nguoi_dung.findFirst({ where: { email, mat_khau } });
@@ -46,9 +41,15 @@ let UserService = class UserService {
         return await this.prisma.nguoi_dung.findFirst({ where: { nguoi_dung_id: +id } });
     }
     async updateInfoUser(data, id) {
-        const check = await this.prisma.nguoi_dung.update({ data, where: { nguoi_dung_id: +id } });
+        const check = await this.prisma.nguoi_dung.update({
+            data, where: {
+                nguoi_dung_id: +id
+            }
+        });
         if (check !== null) {
-            return `Update Success`;
+            return {
+                check, "Message": 'Update success'
+            };
         }
         else {
             return `Update Fail`;
