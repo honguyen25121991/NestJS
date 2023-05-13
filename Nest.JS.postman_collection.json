@@ -286,7 +286,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoibm9kZWpzIDI5IiwiaWF0IjoxNjgyOTE1MDg2LCJleHAiOjE2ODI5MTg2ODZ9.figQ9j9H0c6Z_dvuEdShkvSfVCGywrvRcuZcMo2B5eY",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoibm9kZWpzIDI5IiwiaWF0IjoxNjgzOTgxODEwLCJleHAiOjE2ODM5ODU0MTB9.2CsjBdm5gflWXi_r2Romriw5DMv1q9sqyqSyblS6PQM",
 									"type": "string"
 								}
 							]
@@ -295,7 +295,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\"nguoi_dung_id\":1,\n \"hinh_id\":2, \n \"noi_dung\":\"aaaaaa\"\n}",
+							"raw": "{\n\"nguoi_dung_id\":57,\n \"hinh_id\":49, \n \"noi_dung\":\"dsađasađâsda\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -349,19 +349,19 @@
 					"response": []
 				},
 				{
-					"name": "AddImage",
+					"name": "Update Image",
 					"request": {
 						"auth": {
 							"type": "bearer",
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoibm9kZWpzIDI5IiwiaWF0IjoxNjgyOTQwMjk0LCJleHAiOjE2ODI5NDM4OTR9.5Tf2yo2LNzE0dO5mX1kTa7zoLPK8BbomtBIpN0yqOBI",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoibm9kZWpzIDI5IiwiaWF0IjoxNjgzOTc3NDg3LCJleHAiOjE2ODM5ODEwODd9.55o8uZfdhHJPdqnqOy1oFn9ewDClMfTL9sWrS3dIXFk",
 									"type": "string"
 								}
 							]
 						},
-						"method": "POST",
+						"method": "PATCH",
 						"header": [],
 						"body": {
 							"mode": "formdata",
@@ -369,25 +369,96 @@
 								{
 									"key": "fileUpload",
 									"type": "file",
-									"src": "/Users/honguyen/Downloads/340770410_1418401762313066_1056989702900640444_n.jpg"
+									"src": "/Users/honguyen/Downloads/342815658_1377388623051133_7902821614612842902_n.jpg"
 								},
 								{
-									"key": "nguoi_dung_id",
-									"value": "1",
-									"type": "text",
-									"disabled": true
+									"key": "ten_hinh",
+									"value": "dasdsdadasda",
+									"type": "text"
+								},
+								{
+									"key": "mo_ta",
+									"value": "dadsadasdas",
+									"type": "text"
+								},
+								{
+									"key": "hinh_id",
+									"value": "122222",
+									"type": "text"
 								}
 							]
 						},
 						"url": {
-							"raw": "{{host}}/handle-images/update-image/1",
+							"raw": "{{host}}/handle-images/update-image/12",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"handle-images",
 								"update-image",
-								"1"
+								"12"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "post image",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoibm9kZWpzIDI5IiwiaWF0IjoxNjgzOTczODc5LCJleHAiOjE2ODM5Nzc0Nzl9.GSsjr8z2wr6UmDNt5Ik6OuEuJfyB8ejh8FRuyYPG51c",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "fileUpload",
+									"type": "file",
+									"src": "/Users/honguyen/Downloads/aDUehIXwGBeG2WK5xUUT_62149c41d613f_cvtpl.jpg"
+								},
+								{
+									"key": "ten_hinh",
+									"value": "2 con meo",
+									"type": "text"
+								},
+								{
+									"key": "mo_ta",
+									"value": "dsadsda",
+									"type": "text"
+								},
+								{
+									"key": "duong_dan",
+									"value": "dsdasdsada",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/handle-images/post-image/2",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"handle-images",
+								"post-image",
+								"2"
 							]
 						}
 					},
@@ -396,17 +467,27 @@
 				{
 					"name": "List images save",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoibm9kZWpzIDI5IiwiaWF0IjoxNjgzOTY3OTExLCJleHAiOjE2ODM5NzE1MTF9.14rGHrfFC8wGnYJcWH77-qT-E62NK2Tvu6yfNP8y9hE",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/handle-images/save-list/1",
+							"raw": "{{host}}/handle-images/save-list/2",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"handle-images",
 								"save-list",
-								"1"
+								"2"
 							]
 						}
 					},
@@ -415,6 +496,16 @@
 				{
 					"name": "List images create",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoibm9kZWpzIDI5IiwiaWF0IjoxNjgzOTY3MTU2LCJleHAiOjE2ODM5NzA3NTZ9.jrO-qGldpBH9qxKuXjYQGvT3SuFKxI60VbKOLlOKIuM",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -434,17 +525,31 @@
 				{
 					"name": "Delete image",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoibm9kZWpzIDI5IiwiaWF0IjoxNjgzOTc3NTgwLCJleHAiOjE2ODM5ODExODB9.ygM7fzqplnG2T3TQfKn39cm23vLTpHQdiJrJaSmke8Y",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
 						"url": {
-							"raw": "{{host}}/handle-images/delete/7",
+							"raw": "{{host}}/handle-images/delete/6",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"handle-images",
 								"delete",
-								"7"
+								"6"
 							]
 						}
 					},
