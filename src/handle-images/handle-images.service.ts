@@ -6,6 +6,7 @@ export class HandleImagesService {
     prisma = new PrismaClient()
 
     async postImage(id: string, ten_hinh: string, duong_dan: string, mo_ta: string) {
+        const date = new Date();
         await this.prisma.hinh_anh.create({
             data: {
                 nguoi_dung_id: +id,
@@ -14,7 +15,16 @@ export class HandleImagesService {
                 mo_ta: mo_ta
             }
         })
-        return "Upload Success";
+        return {
+            "statusCode": 200,
+            "message": "Tải ảnh thành công ",
+            "content": {
+                ten_hinh, duong_dan, mo_ta,
+            },
+            "dateTime": date
+        }
+
+
     }
     async getImages(): Promise<any> {
         return await this.prisma.hinh_anh.findMany()
@@ -50,51 +60,74 @@ export class HandleImagesService {
         return await this.prisma.luu_anh.findMany({ where: { nguoi_dung_id: +id } })
     }
     async deleteImage(id: string): Promise<any> {
-
-        try {
-            const existingImage = await this.prisma.hinh_anh.findUnique({
-                where: {
-                    hinh_id: 1
-                }
-            });
-
-            if (!existingImage) {
-                throw new Error('Hình ảnh không tồn tại');
+        const existingImage = await this.prisma.hinh_anh.findUnique({
+            where: {
+                hinh_id: +id
             }
-
+        });
+        if (!existingImage) {
+            return {
+                "statusCode": 404,
+                "message": " Id ảnh không tồn tại",
+            }
+        } else {
             await this.prisma.$transaction([
-                this.prisma.hinh_anh.deleteMany({
-                    where: {
-                        nguoi_dung_id: 1
-                    }
-                }),
                 this.prisma.hinh_anh.delete({
-                    where: {
-                        hinh_id: 1
-                    }
-                })
+                    where: { hinh_id: +id },
+                }),
             ]);
-
-            console.log('Xóa hình ảnh thành công');
-
-        } catch (err) {
-            console.error(err);
-        } finally {
-            await this.prisma.$disconnect();
         }
 
 
     }
-    async updateImage(id: string, imageName: string,) {
-        let data = await this.prisma.hinh_anh.findFirst({
-            where: { nguoi_dung_id: +id }
-        })
-        data.ten_hinh = imageName
-        await this.prisma.hinh_anh.update({
-            data, where: {
-                hinh_id: +id
+    async updateImage(id: string, ten_hinh: string, mo_ta: string, hinh_id: string, duong_dan: string) {
+        const date = new Date();
+        const checkIdImage = await this.prisma.hinh_anh.findFirst({
+            where: {
+                hinh_id: +hinh_id
             }
         })
-        return "Upload Success";
+        const checkIdUser = await this.prisma.hinh_anh.findFirst({
+            where: {
+                nguoi_dung_id: +id
+            }
+        })
+        if (checkIdUser !== null) {
+            if (checkIdImage === null) {
+                return {
+                    "statusCode": 404,
+                    "message": " Id ảnh không tồn tại",
+                    "dateTime": date
+                }
+            } else {
+                await this.prisma.hinh_anh.update({
+                    data: {
+                        nguoi_dung_id: +id,
+                        ten_hinh: ten_hinh,
+                        mo_ta: mo_ta,
+                        duong_dan: duong_dan
+                    }, where: {
+                        hinh_id: +hinh_id
+                    }
+                })
+                return {
+                    "statusCode": 200,
+                    "message": "Update ảnh thành công ",
+                    "content": {
+                        ten_hinh, duong_dan, mo_ta,
+                    },
+                    "dateTime": date
+                }
+            }
+        } else {
+
+            return {
+                "statusCode": 404,
+                "message": " Id người dùng không tồn tại",
+                "dateTime": date
+            }
+        }
+
+
     }
 }

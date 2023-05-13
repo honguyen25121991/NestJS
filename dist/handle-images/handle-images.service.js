@@ -14,6 +14,7 @@ let HandleImagesService = class HandleImagesService {
         this.prisma = new client_1.PrismaClient();
     }
     async postImage(id, ten_hinh, duong_dan, mo_ta) {
+        const date = new Date();
         await this.prisma.hinh_anh.create({
             data: {
                 nguoi_dung_id: +id,
@@ -22,7 +23,14 @@ let HandleImagesService = class HandleImagesService {
                 mo_ta: mo_ta
             }
         });
-        return "Upload Success";
+        return {
+            "statusCode": 200,
+            "message": "Tải ảnh thành công ",
+            "content": {
+                ten_hinh, duong_dan, mo_ta,
+            },
+            "dateTime": date
+        };
     }
     async getImages() {
         return await this.prisma.hinh_anh.findMany();
@@ -49,47 +57,73 @@ let HandleImagesService = class HandleImagesService {
         return await this.prisma.luu_anh.findMany({ where: { nguoi_dung_id: +id } });
     }
     async deleteImage(id) {
-        try {
-            const existingImage = await this.prisma.hinh_anh.findUnique({
-                where: {
-                    hinh_id: 1
-                }
-            });
-            if (!existingImage) {
-                throw new Error('Hình ảnh không tồn tại');
-            }
-            await this.prisma.$transaction([
-                this.prisma.hinh_anh.deleteMany({
-                    where: {
-                        nguoi_dung_id: 1
-                    }
-                }),
-                this.prisma.hinh_anh.delete({
-                    where: {
-                        hinh_id: 1
-                    }
-                })
-            ]);
-            console.log('Xóa hình ảnh thành công');
-        }
-        catch (err) {
-            console.error(err);
-        }
-        finally {
-            await this.prisma.$disconnect();
-        }
-    }
-    async updateImage(id, imageName) {
-        let data = await this.prisma.hinh_anh.findFirst({
-            where: { nguoi_dung_id: +id }
-        });
-        data.ten_hinh = imageName;
-        await this.prisma.hinh_anh.update({
-            data, where: {
+        const existingImage = await this.prisma.hinh_anh.findUnique({
+            where: {
                 hinh_id: +id
             }
         });
-        return "Upload Success";
+        if (!existingImage) {
+            return {
+                "statusCode": 404,
+                "message": " Id ảnh không tồn tại",
+            };
+        }
+        else {
+            await this.prisma.$transaction([
+                this.prisma.hinh_anh.delete({
+                    where: { hinh_id: +id },
+                }),
+            ]);
+        }
+    }
+    async updateImage(id, ten_hinh, mo_ta, hinh_id, duong_dan) {
+        const date = new Date();
+        const checkIdImage = await this.prisma.hinh_anh.findFirst({
+            where: {
+                hinh_id: +hinh_id
+            }
+        });
+        const checkIdUser = await this.prisma.hinh_anh.findFirst({
+            where: {
+                nguoi_dung_id: +id
+            }
+        });
+        if (checkIdUser !== null) {
+            if (checkIdImage === null) {
+                return {
+                    "statusCode": 404,
+                    "message": " Id ảnh không tồn tại",
+                    "dateTime": date
+                };
+            }
+            else {
+                await this.prisma.hinh_anh.update({
+                    data: {
+                        nguoi_dung_id: +id,
+                        ten_hinh: ten_hinh,
+                        mo_ta: mo_ta,
+                        duong_dan: duong_dan
+                    }, where: {
+                        hinh_id: +hinh_id
+                    }
+                });
+                return {
+                    "statusCode": 200,
+                    "message": "Update ảnh thành công ",
+                    "content": {
+                        ten_hinh, duong_dan, mo_ta,
+                    },
+                    "dateTime": date
+                };
+            }
+        }
+        else {
+            return {
+                "statusCode": 404,
+                "message": " Id người dùng không tồn tại",
+                "dateTime": date
+            };
+        }
     }
 };
 HandleImagesService = __decorate([

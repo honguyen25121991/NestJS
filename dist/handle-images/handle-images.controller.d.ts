@@ -8,8 +8,35 @@ export declare class HandleImagesController {
     postImage(id: string, _file: Express.Multer.File, body: {
         ten_hinh: string;
         mo_ta: string;
-    }): Promise<string>;
-    uploadImage(id: string, file: Express.Multer.File): Promise<string>;
+    }): Promise<{
+        statusCode: number;
+        message: string;
+        content: {
+            ten_hinh: string;
+            duong_dan: string;
+            mo_ta: string;
+        };
+        dateTime: Date;
+    }>;
+    updateImage(id: string, _file: Express.Multer.File, body: {
+        ten_hinh: string;
+        mo_ta: string;
+        hinh_id: string;
+    }): Promise<{
+        statusCode: number;
+        message: string;
+        dateTime: Date;
+        content?: undefined;
+    } | {
+        statusCode: number;
+        message: string;
+        content: {
+            ten_hinh: string;
+            duong_dan: string;
+            mo_ta: string;
+        };
+        dateTime: Date;
+    }>;
     getAll(): Promise<any>;
     getDetailImage(body: {
         name: string;

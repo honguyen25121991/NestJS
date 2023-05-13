@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpException, Param, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, Param, Patch, Post, Put, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import { HandleImagesService } from './handle-images.service';
 import { ApiBody, ApiConsumes } from '@nestjs/swagger';
@@ -26,7 +26,7 @@ export class HandleImagesController {
 
     }))
 
-    // @UseGuards(AuthGuard('jwt'))
+    @UseGuards(AuthGuard('jwt'))
     @Post('/post-image/:id') postImage(
         @Param("id") id: string,
         @UploadedFile() _file: Express.Multer.File,
@@ -42,15 +42,35 @@ export class HandleImagesController {
             throw new HttpException("Lỗi BE", 500)
         }
     }
+
+    @ApiConsumes('mutilpart/from-data')
+    @ApiBody({
+        description: 'fileload',
+        // type: any
+    })
+    @UseInterceptors(FileInterceptor('fileUpload', {
+        storage: diskStorage({
+            destination: process.cwd() + "/public/img",
+            filename: (req, file, callback) => callback(null, Date.now() + "_" + file.originalname)
+        })
+
+    }))
     @UseGuards(AuthGuard('jwt'))
-    @Post('/update-image/:id') uploadImage(
+    @Patch('/update-image/:id') updateImage(
         @Param("id") id: string,
-        @UploadedFile() file: Express.Multer.File) {
-        // try {
-        return this.handleImages.updateImage(id, file.filename)
-        // } catch (error) {
-        //     throw new HttpException("Lỗi BE", 500)
-        // }
+        @UploadedFile() _file: Express.Multer.File,
+        @Body() body: {
+            ten_hinh: string, mo_ta: string, hinh_id: string
+        },
+    ) {
+        const { ten_hinh, mo_ta, hinh_id } = body
+        const duong_dan = `localhost:3000/public/img/${_file.filename}`
+
+        try {
+            return this.handleImages.updateImage(id, ten_hinh, mo_ta, hinh_id, duong_dan)
+        } catch (error) {
+            throw new HttpException("Lỗi BE", 500)
+        }
     }
 
     @UseGuards(AuthGuard('jwt'))
@@ -127,10 +147,10 @@ export class HandleImagesController {
     deleteImage(
         @Param("id") id: string,
     ) {
-        try {
-            return this.handleImages.deleteImage(id)
-        } catch (error) {
-            throw new HttpException("Lỗi BE", 500)
-        }
+        // try {
+        return this.handleImages.deleteImage(id)
+        // } catch (error) {
+        //     throw new HttpException("Lỗi BE", 500)
+        // }
     }
 }

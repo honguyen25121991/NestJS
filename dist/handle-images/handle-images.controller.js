@@ -35,8 +35,15 @@ let HandleImagesController = class HandleImagesController {
             throw new common_1.HttpException("Lỗi BE", 500);
         }
     }
-    uploadImage(id, file) {
-        return this.handleImages.updateImage(id, file.filename);
+    updateImage(id, _file, body) {
+        const { ten_hinh, mo_ta, hinh_id } = body;
+        const duong_dan = `localhost:3000/public/img/${_file.filename}`;
+        try {
+            return this.handleImages.updateImage(id, ten_hinh, mo_ta, hinh_id, duong_dan);
+        }
+        catch (error) {
+            throw new common_1.HttpException("Lỗi BE", 500);
+        }
     }
     getAll() {
         return this.handleImages.getImages();
@@ -83,12 +90,7 @@ let HandleImagesController = class HandleImagesController {
         }
     }
     deleteImage(id) {
-        try {
-            return this.handleImages.deleteImage(id);
-        }
-        catch (error) {
-            throw new common_1.HttpException("Lỗi BE", 500);
-        }
+        return this.handleImages.deleteImage(id);
     }
 };
 __decorate([
@@ -102,6 +104,7 @@ __decorate([
             filename: (req, file, callback) => callback(null, Date.now() + "_" + file.originalname)
         })
     })),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
     (0, common_1.Post)('/post-image/:id'),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.UploadedFile)()),
@@ -111,14 +114,25 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], HandleImagesController.prototype, "postImage", null);
 __decorate([
+    (0, swagger_1.ApiConsumes)('mutilpart/from-data'),
+    (0, swagger_1.ApiBody)({
+        description: 'fileload',
+    }),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('fileUpload', {
+        storage: (0, multer_1.diskStorage)({
+            destination: process.cwd() + "/public/img",
+            filename: (req, file, callback) => callback(null, Date.now() + "_" + file.originalname)
+        })
+    })),
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
-    (0, common_1.Post)('/update-image/:id'),
+    (0, common_1.Patch)('/update-image/:id'),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.UploadedFile)()),
+    __param(2, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:paramtypes", [String, Object, Object]),
     __metadata("design:returntype", void 0)
-], HandleImagesController.prototype, "uploadImage", null);
+], HandleImagesController.prototype, "updateImage", null);
 __decorate([
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
     (0, common_1.Get)('all'),
