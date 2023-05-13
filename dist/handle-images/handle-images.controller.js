@@ -25,13 +25,18 @@ let HandleImagesController = class HandleImagesController {
         this.handleImages = handleImages;
         this.prisma = new client_1.PrismaClient();
     }
-    updateImage(id, file) {
+    postImage(id, _file, body) {
+        const { ten_hinh, mo_ta } = body;
+        const duong_dan = `localhost:3000/public/img/${_file.filename}`;
         try {
-            return this.handleImages.updateImage(id, file.filename);
+            return this.handleImages.postImage(id, ten_hinh, duong_dan, mo_ta);
         }
         catch (error) {
             throw new common_1.HttpException("Lỗi BE", 500);
         }
+    }
+    uploadImage(id, file) {
+        return this.handleImages.updateImage(id, file.filename);
     }
     getAll() {
         return this.handleImages.getImages();
@@ -97,6 +102,15 @@ __decorate([
             filename: (req, file, callback) => callback(null, Date.now() + "_" + file.originalname)
         })
     })),
+    (0, common_1.Post)('/post-image/:id'),
+    __param(0, (0, common_1.Param)("id")),
+    __param(1, (0, common_1.UploadedFile)()),
+    __param(2, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object, Object]),
+    __metadata("design:returntype", void 0)
+], HandleImagesController.prototype, "postImage", null);
+__decorate([
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
     (0, common_1.Post)('/update-image/:id'),
     __param(0, (0, common_1.Param)("id")),
@@ -104,7 +118,7 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", void 0)
-], HandleImagesController.prototype, "updateImage", null);
+], HandleImagesController.prototype, "uploadImage", null);
 __decorate([
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
     (0, common_1.Get)('all'),

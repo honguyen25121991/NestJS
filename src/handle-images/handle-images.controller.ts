@@ -23,17 +23,34 @@ export class HandleImagesController {
             destination: process.cwd() + "/public/img",
             filename: (req, file, callback) => callback(null, Date.now() + "_" + file.originalname)
         })
+
     }))
 
-    @UseGuards(AuthGuard('jwt'))
-    @Post('/update-image/:id') updateImage(
+    // @UseGuards(AuthGuard('jwt'))
+    @Post('/post-image/:id') postImage(
         @Param("id") id: string,
-        @UploadedFile() file: Express.Multer.File) {
+        @UploadedFile() _file: Express.Multer.File,
+        @Body() body: {
+            ten_hinh: string, mo_ta: string
+        },
+    ) {
+        const { ten_hinh, mo_ta } = body
+        const duong_dan = `localhost:3000/public/img/${_file.filename}`
         try {
-            return this.handleImages.updateImage(id, file.filename)
+            return this.handleImages.postImage(id, ten_hinh, duong_dan, mo_ta)
         } catch (error) {
             throw new HttpException("Lỗi BE", 500)
         }
+    }
+    @UseGuards(AuthGuard('jwt'))
+    @Post('/update-image/:id') uploadImage(
+        @Param("id") id: string,
+        @UploadedFile() file: Express.Multer.File) {
+        // try {
+        return this.handleImages.updateImage(id, file.filename)
+        // } catch (error) {
+        //     throw new HttpException("Lỗi BE", 500)
+        // }
     }
 
     @UseGuards(AuthGuard('jwt'))

@@ -24,17 +24,48 @@ let UserService = class UserService {
         return await this.prisma.nguoi_dung.findMany();
     }
     async createUser(user) {
-        await this.prisma.nguoi_dung.create({ data: user });
-        return `Tạo người dùng thành công`;
+        const { email, mat_khau, ho_ten, tuoi, anh_dai_dien } = user;
+        const checkEmail = await this.prisma.nguoi_dung.findFirst({ where: { email } });
+        const date = new Date();
+        if (checkEmail === null) {
+            await this.prisma.nguoi_dung.create({ data: user });
+            return {
+                "statusCode": 200,
+                "message": "Tạo người dùng thành công",
+                "content": {
+                    email, mat_khau, ho_ten, tuoi, anh_dai_dien
+                },
+                "dateTime": date
+            };
+        }
+        else {
+            return {
+                "statusCode": 400,
+                "message": "Yêu cầu không hợp lệ!",
+                "content": "Email đã tồn tại !",
+                "dateTime": date
+            };
+        }
     }
     async loginUser(email, mat_khau) {
         const user = await this.prisma.nguoi_dung.findFirst({ where: { email, mat_khau } });
+        const date = new Date();
         if (user !== null) {
             let token = this.jwtService.sign({ data: 'nodejs 29' }, { secret: this.config.get("SECRET_KEY"), expiresIn: "60m" });
-            return { "token": token, "Message": "Login thanh cong" };
+            return {
+                "statusCode": 200,
+                "content:": user,
+                "token": token,
+                "dateTime": date
+            };
         }
         else {
-            return `Sai tk hoac mat khau`;
+            return {
+                "statusCode": 400,
+                "message": "Yêu cầu không hợp lệ!",
+                "content": "Email hoặc mật khẩu không đúng !",
+                "dateTime": date
+            };
         }
     }
     async getInfoUser(id) {

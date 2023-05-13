@@ -5,7 +5,11 @@ export declare class HandleImagesController {
     private handleImages;
     prisma: PrismaClient<import(".prisma/client").Prisma.PrismaClientOptions, never, import(".prisma/client").Prisma.RejectOnNotFound | import(".prisma/client").Prisma.RejectPerOperation>;
     constructor(handleImages: HandleImagesService);
-    updateImage(id: string, file: Express.Multer.File): Promise<string>;
+    postImage(id: string, _file: Express.Multer.File, body: {
+        ten_hinh: string;
+        mo_ta: string;
+    }): Promise<string>;
+    uploadImage(id: string, file: Express.Multer.File): Promise<string>;
     getAll(): Promise<any>;
     getDetailImage(body: {
         name: string;
